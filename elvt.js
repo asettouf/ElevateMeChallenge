@@ -15,24 +15,33 @@
 
         floors.forEach(function(floor, i){
             floor.on("up_button_pressed", function(){
+                var diff = 0;
+				var minDiff = 100;
+				var elevatorToSend = 0;
+				var that = this;
                 elevators.forEach(function(elevator, i){
-                    if(!elevator.destinationQueue || elevator.loadFactor == 1  || elevator.destinationQueue.indexOf(floor.floorNum) > -1){
-                        return;
-                    }
-                    elevator.goToFloor(floor.floorNum);
-					return false;
-
+                    diff = Math.abs(that.floorNum() - elevator.currentFloor());
+					if(diff < minDiff && this.loadFactor != 1){
+						elevatorToSend = i;
+						minDiff = diff;
+						
+					}
                 });
+				elevators[elevatorToSend].goToFloor(this.floorNum());
             });
 			floor.on("down_button_pressed", function(){
+				var diff = 0;
+				var minDiff = 100;
+				var elevatorToSend = 0;
+				var that = this;
                 elevators.forEach(function(elevator, i){
-                    if(!elevator.destinationQueue || elevator.loadFactor == 1 || elevator.destinationQueue.indexOf(floor.floorNum) > -1){
-                        return;
-                    }
-                    elevator.goToFloor(floor.floorNum);
-					return false;
-
+                    diff = Math.abs(that.floorNum() - elevator.currentFloor());
+					if(diff < minDiff && this.loadFactor != 1){
+						elevatorToSend = i;
+						minDiff = diff;
+					}
                 });
+				elevators[elevatorToSend].goToFloor(this.floorNum());
             });
         });
 
