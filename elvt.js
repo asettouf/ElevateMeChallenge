@@ -38,7 +38,7 @@
 				var elevatorToSend = 0;
 				var i = 0;
 				for(i;i < elevators.length; i++){
-					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor());
+					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - this.floorNum());
 					if(diff < minDiff && elevators[i].loadFactor != 1){
 						elevatorToSend = i;
 						minDiff = diff;
@@ -55,7 +55,7 @@
 				var elevatorToSend = 0;
 				var i = 0;
 				for(i;i < elevators.length; i++){
-					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor());
+					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - this.floorNum());
 					if(diff < minDiff && elevators[i].loadFactor != 1){
 						elevatorToSend = i;
 						minDiff = diff;
