@@ -5,7 +5,9 @@
         var elevatorThird = elevators[2];
         var elevatorFourth = elevators[3];
         elevators.forEach(function(elevator, i){
-            
+            elevator.on("idle", function(floorNum){
+                this.goToFloor(0);
+            });
 			elevator.on("floor_button_pressed", function(floorNum){
                 this.goToFloor(floorNum);
             });
