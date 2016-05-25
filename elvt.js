@@ -14,6 +14,8 @@
                 this.goToFloor(floorNum);
             });
 		}
+		
+		
         
 		var removeDuplicate = function(arr) {
 			var seen = {};
@@ -29,45 +31,34 @@
 			}
 			return out;
 		};
+		var sendElevatorOnFloorButtonPressed = function(elevators, floor){
+			var diff = 0;
+			var minDiff = 100;
+			var elevatorToSend = elevators[0];
+			var i = 0;
+			for(i;i < elevators.length; i++){
+				diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - floor.floorNum());
+				if(diff < minDiff && elevators[i].loadFactor != 1){
+					elevatorToSend = elevators[i];
+					minDiff = diff;
+				}
+			}
+			
+			elevatorToSend.destinationQueue.splice(1,0, floor.floorNum());
+			elevatorToSend.destinationQueue = removeDuplicate(elevatorToSend.destinationQueue);
+			elevatorToSend.checkDestinationQueue();
+			
+		};
 		var j = 0;
 		for(j;j < floors.length; j++){
 			var floor = floors[j];
 			floor.on("up_button_pressed", function(){
-                var diff = 0;
-				var minDiff = 100;
-				var elevatorToSend = 0;
-				var i = 0;
-				for(i;i < elevators.length; i++){
-					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - this.floorNum());
-					if(diff < minDiff && elevators[i].loadFactor != 1){
-						elevatorToSend = i;
-						minDiff = diff;
-					}
-				}
-				elevators[elevatorToSend].destinationQueue.splice(1,0, this.floorNum());
-				elevators[elevatorToSend].destinationQueue = removeDuplicate(elevators[elevatorToSend].destinationQueue);
-				elevators[elevatorToSend].checkDestinationQueue();
+				sendElevatorOnFloorButtonPressed(elevators, this);
+				
 				//elevators[elevatorToSend].goToFloor(this.floorNum());
             });
 			floor.on("down_button_pressed", function(){
-				var diff = 0;
-				var minDiff = 100;
-				var elevatorToSend = 0;
-				var i = 0;
-				for(i;i < elevators.length; i++){
-					diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - this.floorNum());
-					if(diff < minDiff && elevators[i].loadFactor != 1){
-						elevatorToSend = i;
-						minDiff = diff;
-					}
-				}
-                
-				//console.log(this.floorNum());
-				//console.log(elevators[elevatorToSend].destinationQueue);
-				elevators[elevatorToSend].destinationQueue.splice(1,0, this.floorNum());
-				elevators[elevatorToSend].destinationQueue = removeDuplicate(elevators[elevatorToSend].destinationQueue);
-				//console.log(elevators[elevatorToSend].destinationQueue);
-				elevators[elevatorToSend].checkDestinationQueue();
+				sendElevatorOnFloorButtonPressed(elevators, this);
 			});
 		}
         
