@@ -25,25 +25,26 @@
 		  var minDiff = 100;
 		  var elevatorToSend = elevators[0];
 		  var i = 0;
-		 /** for(i;i < elevators.length; i++){
+		  for(i;i < elevators.length; i++){
 			if(elevators[i].destinationQueue.includes(floor.floorNum())){
 			  console.log("ABORT");
 			  return;
 			}
 			if(elevators[i].destinationQueue.length === 0){
 			  elevatorToSend = elevators[i];
-			  break;
+			  elevatorToSend.goToFloor(floor.floorNum());
+			  return;
 			}
-			diff = Math.abs(elevators[i].destinationQueue[0] - elevators[i].currentFloor() - floor.floorNum());
-			if(diff < minDiff && elevators[i].loadFactor != 1){
+			diff = Math.abs(elevators[i].currentFloor() - floor.floorNum());
+			if((elevators[i].currentFloor < floor.floorNum() && elevators[i].destinationDirection === "up") || 
+			(elevators[i].currentFloor > floor.floorNum() && elevators[i].destinationDirection === "down")){
 			  elevatorToSend = elevators[i];
-			  minDiff = diff;
+			  elevatorToSend.goToFloor(floor.floorNum(), true);
+			  return;
 			}
-		  }**/
+		  }
 
-		  elevatorToSend.destinationQueue.splice(1,0, floor.floorNum());
-		  elevatorToSend.destinationQueue = removeDuplicate(elevatorToSend.destinationQueue);
-		  elevatorToSend.checkDestinationQueue();
+		  
 
 		};
 
@@ -101,15 +102,16 @@
     			elevator.on("floor_button_pressed", function(floorNum){
                     this.goToFloor(floorNum);
                     this.destinationQueue = sortQueue(this);
+					
                     this.checkDestinationQueue();
-					i == 0 ? activateArrow(this) : "";
+					//activateArrow(this);
                 });
 				elevator.on("stopped_at_floor", function(floorNum){
 					//console.log(this.destinationDirection());
-                    //cleanDestQueue(this);
+                    
                     this.destinationQueue = sortQueue(this);
                     this.checkDestinationQueue();
-					i == 0 ? activateArrow(this) : "";
+					//activateArrow(this);
                   });
     		}
 
