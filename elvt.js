@@ -25,7 +25,7 @@
 		  var minDiff = 100;
 		  var elevatorToSend = elevators[0];
 		  var i = 0;
-		  for(i;i < elevators.length; i++){
+		 /** for(i;i < elevators.length; i++){
 			if(elevators[i].destinationQueue.includes(floor.floorNum())){
 			  console.log("ABORT");
 			  return;
@@ -39,7 +39,7 @@
 			  elevatorToSend = elevators[i];
 			  minDiff = diff;
 			}
-		  };
+		  }**/
 
 		  elevatorToSend.destinationQueue.splice(1,0, floor.floorNum());
 		  elevatorToSend.destinationQueue = removeDuplicate(elevatorToSend.destinationQueue);
@@ -102,18 +102,18 @@
                     this.goToFloor(floorNum);
                     this.destinationQueue = sortQueue(this);
                     this.checkDestinationQueue();
-					activateArrow(this);
+					i == 0 ? activateArrow(this) : "";
                 });
 				elevator.on("stopped_at_floor", function(floorNum){
 					//console.log(this.destinationDirection());
                     //cleanDestQueue(this);
                     this.destinationQueue = sortQueue(this);
                     this.checkDestinationQueue();
-					activateArrow(this);
+					i == 0 ? activateArrow(this) : "";
                   });
     		}
 
-/**
+
   		var j = 0;
   		for(j;j < floors.length; j++){
   			var floor = floors[j];
@@ -127,7 +127,7 @@
   			});
 		  }
 
-**/
+
     },
         update: function(dt, elevators, floors) {
 			var i = 0;
