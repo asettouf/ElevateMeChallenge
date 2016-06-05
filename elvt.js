@@ -1,6 +1,14 @@
 {
     init: function(elevators, floors) {
+        //array with number of time floor was queued
         var queuedFloors = [];
+        var maxFloor = 11;
+
+        //init queue with zeros
+        var k = 0;
+        for(k; k <= maxFloor; k++){
+            queuedFloors[k] = 0;
+        }
 		var cleanDestQueue = function(elevator){
 			elevator.destinationQueue = elevator.getPressedFloors();
 			elevator.checkDestinationQueue();
@@ -10,6 +18,22 @@
           elevator.destinationQueue = sortQueue(elevator);
           elevator.checkDestinationQueue();
         };
+
+        var sort = function(arr){
+            var j = 1;
+            var key = arr[0];
+            var i = j;
+            for(j; j < arr.length; j++){
+                key = arr[j];
+                i = j - 1;
+                while( i >= 0 && arr[i] > key){
+                    arr[i+1] = arr[i];
+                    i -= 1;
+
+                }
+                arr[i+1] = key;
+            }
+        }
 
 		var removeDuplicate = function(arr) {
 		  var seen = {};
@@ -25,17 +49,14 @@
 		  }
 		  return out;
 		};
+
 		var sendElevatorOnFloorButtonPressed = function(elevators, floor){
 		  var diff = 0;
 		  var minDiff = 100;
 		  var elevatorToSend = elevators[0];
 		  var i = 0;
 		  for(i;i < elevators.length; i++){
- 			if(elevators[i].destinationQueue.length === 0){
-  			  elevatorToSend = elevators[i];
-  			  elevatorToSend.goToFloor(floor.floorNum());
-  			  return;
-  			}
+
   			if((elevators[i].currentFloor < floor.floorNum() && elevators[i].destinationDirection === "up") ||
   			(elevators[i].currentFloor > floor.floorNum() && elevators[i].destinationDirection === "down")){
              // diff = Math.abs(elevators[i].currentFloor() - floor.floorNum());
@@ -44,11 +65,12 @@
                reorderDestQueue(elevatorToSend);
    			  return;
             }
-            queuedFloors.push(floor.floorNum());
+            queuedFloors[floor.floorNum()]++;
 		  }
 
 		};
 
+        //TODO: Make new function
         var onIdling = function(elevator){
             queuedFloors = removeDuplicate(queuedFloors);
             console.log("IDLING QUEUE " + queuedFloors);
